@@ -1,0 +1,18 @@
+version: "3"
+services:
+  tinyurl-service:
+    build: .
+    restart: on-failure
+    ports:
+      - "8082:8080"
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+     - "9090:9090"
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    volumes:
+      - ./resources/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - tinyurl-service
