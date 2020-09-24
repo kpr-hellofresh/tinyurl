@@ -1,3 +1,4 @@
 # Tinyurl
 
-## TBD
+### Miro board
+https://miro.com/app/board/o9J_knR_N_0=
