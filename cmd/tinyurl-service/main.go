@@ -7,7 +7,15 @@ import (
 )
 
 func main() {
+	config, err := ParseConfig()
+	if err != nil {
+		panic(err)
+	}
+
 	router := app.NewRouter()
 
-	http.ListenAndServe(":8080", router)
+	err = http.ListenAndServe(config.ListenerAddress(), router)
+	if err != nil {
+		panic(err)
+	}
 }
