@@ -11,6 +11,12 @@ type Shortener interface {
 	Shorten(ctx context.Context, data string) (string, error)
 }
 
+type ShortenerFunc func(ctx context.Context, data string) (string, error)
+
+func (fn ShortenerFunc) Shorten(ctx context.Context, data string) (string, error) {
+	return fn(ctx, data)
+}
+
 // type Service struct {
 // 	URLAdder url.Adder
 // }
