@@ -2,9 +2,14 @@ package app
 
 import (
 	"context"
+	"time"
 
 	"github.com/kpr-hellofresh/tinyurl/internal/domain/url"
 )
+
+type Shortener interface {
+	Shorten(ctx context.Context, data string) (string, error)
+}
 
 // type Service struct {
 // 	URLAdder url.Adder
@@ -19,11 +24,27 @@ import (
 // }
 
 type ShortenURL struct {
-	Adder url.Adder
+	Adder     url.Adder
+	Shortener Shortener
 }
 
-func (srv ShortenURL) Handle() {
+func (srv ShortenURL) Handle(ctx context.Context, longUrl string) (url.URL, error) {
+	id, err := srv.Shortener.Shorten(ctx, longUrl)
+	if err != nil {
+		return url.URL{}, err
+	}
 
+	u := url.URL{
+		ID:        id,
+		Data:      longUrl,
+		CreatedAt: time.Now(),
+	}
+
+	if err := srv.Adder.Add(ctx, u); err != nil {
+		return url.URL{}, err
+	}
+
+	return u, nil
 }
 
 type GetURL struct {
