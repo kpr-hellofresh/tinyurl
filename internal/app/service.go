@@ -32,6 +32,7 @@ func (fn ShortenerFunc) Shorten(ctx context.Context, data string) (string, error
 type ShortenURL struct {
 	Adder     url.Adder
 	Shortener Shortener
+	Now       func() time.Time
 }
 
 func (srv ShortenURL) Handle(ctx context.Context, longUrl string) (url.URL, error) {
@@ -43,7 +44,7 @@ func (srv ShortenURL) Handle(ctx context.Context, longUrl string) (url.URL, erro
 	u := url.URL{
 		ID:        id,
 		Data:      longUrl,
-		CreatedAt: time.Now(),
+		CreatedAt: srv.Now(),
 	}
 
 	if err := srv.Adder.Add(ctx, u); err != nil {
