@@ -17,6 +17,12 @@ func (fn ShortenerFunc) Shorten(ctx context.Context, data string) (string, error
 	return fn(ctx, data)
 }
 
+type GetterFunc func(ctx context.Context, id string) (url.URL, error)
+
+func (fn GetterFunc) Get(ctx context.Context, id string) (url.URL, error) {
+	return fn(ctx, id)
+}
+
 // type Service struct {
 // 	URLAdder url.Adder
 // }

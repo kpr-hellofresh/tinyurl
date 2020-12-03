@@ -80,3 +80,38 @@ func TestShortenURL_Handle(t *testing.T) {
 		assert.Equal(t, testURL, u)
 	})
 }
+
+func TestGetURL_Handle(t *testing.T) {
+	t.Run("Getter fails", func(t *testing.T) {
+		srv := app.GetURL{
+			Getter: app.GetterFunc(func(ctx context.Context, id string) (url.URL, error) {
+				return url.URL{}, errors.New("Getter fail")
+			}),
+		}
+
+		_, err := srv.Handle(context.Background(), "mockId")
+		assert.Error(t, err)
+	})
+
+	t.Run("Happy Path", func(t *testing.T) {
+		now := time.Now()
+		mockId := "mockId"
+
+		testURL := url.URL{
+			ID:        mockId,
+			Data:      "pippo",
+			CreatedAt: now,
+		}
+
+		getter := new(mocks.Getter)
+		getter.On("Get", mock.Anything, mockId).Return(testURL, nil)
+
+		srv := app.GetURL{
+			Getter: getter,
+		}
+
+		u, err := srv.Handle(context.Background(), mockId)
+		assert.NoError(t, err)
+		assert.Equal(t, testURL, u)
+	})
+}
