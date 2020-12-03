@@ -83,10 +83,11 @@ func TestShortenURL_Handle(t *testing.T) {
 
 func TestGetURL_Handle(t *testing.T) {
 	t.Run("Getter fails", func(t *testing.T) {
+		getter := new(mocks.Getter)
+		getter.On("Get", mock.Anything, mock.Anything).Return(url.URL{}, errors.New("Getter fail"))
+
 		srv := app.GetURL{
-			Getter: app.GetterFunc(func(ctx context.Context, id string) (url.URL, error) {
-				return url.URL{}, errors.New("Getter fail")
-			}),
+			Getter: getter,
 		}
 
 		_, err := srv.Handle(context.Background(), "mockId")
