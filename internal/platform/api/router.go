@@ -1,13 +1,14 @@
-package app
+package api
 
 import (
 	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi"
+	"github.com/kpr-hellofresh/tinyurl/internal/app"
 )
 
-func NewRouter() http.Handler {
+func NewRouter(srv app.Service) http.Handler {
 	router := chi.NewRouter()
 
 	router.Get("/test", func(w http.ResponseWriter, r *http.Request) {

@@ -17,17 +17,17 @@ func (fn ShortenerFunc) Shorten(ctx context.Context, data string) (string, error
 	return fn(ctx, data)
 }
 
-// type Service struct {
-// 	URLAdder url.Adder
-// }
+type Service struct {
+	ShortenURL
+	GetURL
+	// Adder // POST
+	// Getter // GET
+	// Shortener
+	// Now
+}
 
-// func (srv Service) ShortenURL() {
-
-// }
-
-// func (srv Service) GetURL() {
-
-// }
+// func (srv Service) ShortenAndSave () {}
+// func (srv Service) Get () {}
 
 type ShortenURL struct {
 	Adder     url.Adder
